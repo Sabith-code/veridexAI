@@ -60,18 +60,31 @@ const SetupConfig = ({
    * preference, which is why other answer engines never surface it either.
    */
   const autoSelectModels = async () => {
-    const chatProvider = providers.find(
-      (p) => p.type !== 'transformers' && p.chatModels.length > 0,
-    );
+    const chatProvider =
+      providers.find(
+        (p) => p.type === 'openai' && p.chatModels.length > 0,
+      ) ??
+      providers.find(
+        (p) => p.type !== 'transformers' && p.chatModels.length > 0,
+      );
+
     if (chatProvider) {
+      const selectedModel = chatProvider.chatModels[0];
+      console.log('[SetupConfig] selecting default chat model', {
+        providerId: chatProvider.id,
+        providerType: chatProvider.type,
+        selectedModel,
+      });
       localStorage.setItem('chatModelProviderId', chatProvider.id);
-      localStorage.setItem('chatModelKey', chatProvider.chatModels[0].key);
+      localStorage.setItem('chatModelKey', selectedModel.key);
+
       setChatModelProvider({
         providerId: chatProvider.id,
-        key: chatProvider.chatModels[0].key,
+        key: selectedModel.key,
       });
+    } else {
+      console.warn('[SetupConfig] no chat provider with models was selected');
     }
-
     /* Embeddings are never a user-facing choice — they only rerank search
        results, and a worse reranker just means worse answers. Prefer Ollama's
        local model (the installer pulls nomic-embed-text alongside the chat
@@ -117,6 +130,13 @@ const SetupConfig = ({
     try {
       setIsFinishing(true);
       await autoSelectModels();
+
+      const selectedProviderId = localStorage.getItem('chatModelProviderId');
+      const selectedKey = localStorage.getItem('chatModelKey');
+      console.log('[SetupConfig] finishing setup with selected model', {
+        selectedProviderId,
+        selectedKey,
+      });
 
       const res = await fetch('/api/config/setup-complete', {
         method: 'POST',

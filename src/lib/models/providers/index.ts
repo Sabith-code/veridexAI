@@ -9,8 +9,10 @@ import LemonadeProvider from './lemonade';
 import AnthropicProvider from './anthropic';
 import ClaudeCodeProvider from './claudecode';
 import XAIProvider from './xai';
+import OpenRouterProvider from './openrouter';
 
 export const providers: Record<string, ProviderConstructor<any>> = {
+  openrouter: OpenRouterProvider,
   openai: OpenAIProvider,
   ollama: OllamaProvider,
   gemini: GeminiProvider,

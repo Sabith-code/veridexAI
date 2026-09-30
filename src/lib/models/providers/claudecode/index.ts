@@ -3,7 +3,10 @@ import { Model, ModelList, ProviderMetadata } from '../../types';
 import BaseEmbedding from '../../base/embedding';
 import BaseModelProvider from '../../base/provider';
 import BaseLLM from '../../base/llm';
-import ClaudeCodeLLM, { findClaudeBinary } from './claudeCodeLLM';
+import ClaudeCodeLLM, {
+  findClaudeBinary,
+  verifyClaudeCode,
+} from './claudeCodeLLM';
 
 /* Claude through the user's own Claude Code install.
  *
@@ -60,6 +63,13 @@ class ClaudeCodeProvider extends BaseModelProvider<ClaudeCodeConfig> {
   }
 
   async getModelList(): Promise<ModelList> {
+    const binary = this.resolveBinary();
+    const verified = await verifyClaudeCode(binary);
+
+    if (!verified.ok) {
+      throw new Error(verified.message);
+    }
+
     return this.getDefaultModels();
   }
 
@@ -71,7 +81,13 @@ class ClaudeCodeProvider extends BaseModelProvider<ClaudeCodeConfig> {
       );
     }
 
-    return new ClaudeCodeLLM({ model: key, binary: this.resolveBinary() });
+    const binary = this.resolveBinary();
+    const verified = await verifyClaudeCode(binary);
+    if (!verified.ok) {
+      throw new Error(verified.message);
+    }
+
+    return new ClaudeCodeLLM({ model: key, binary });
   }
 
   async loadEmbeddingModel(key: string): Promise<BaseEmbedding<any>> {

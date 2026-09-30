@@ -47,9 +47,10 @@ const searchVideos = async (
     engines: ['youtube'],
   });
 
+  const videoResults = Array.isArray(searchRes?.results) ? searchRes.results : [];
   const videos: VideoSearchResult[] = [];
 
-  searchRes.results.forEach((result) => {
+  videoResults.forEach((result) => {
     if (result.thumbnail && result.url && result.title && result.iframe_src) {
       videos.push({
         img_src: result.thumbnail,

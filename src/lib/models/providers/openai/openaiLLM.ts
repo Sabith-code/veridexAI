@@ -20,7 +20,7 @@ import {
 import { Message } from '@/lib/types';
 import { repairJson } from '@toolsycc/json-repair';
 
-type OpenAIConfig = {
+export type OpenAIConfig = {
   apiKey: string;
   model: string;
   baseURL?: string;

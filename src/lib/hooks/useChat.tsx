@@ -10,7 +10,23 @@ import {
   useRef,
   useState,
 } from 'react';
-import crypto from 'crypto';
+const crypto = {
+  randomUUID: () => globalThis.crypto.randomUUID(),
+  randomBytes: (size: number) => {
+    const bytes = new Uint8Array(size);
+    globalThis.crypto.getRandomValues(bytes);
+    return {
+      toString: (encoding: string) => {
+        if (encoding !== 'hex') {
+          throw new Error(`Unsupported encoding: ${encoding}`);
+        }
+        return Array.from(bytes)
+          .map((byte) => byte.toString(16).padStart(2, '0'))
+          .join('');
+      },
+    };
+  },
+};
 import { useParams, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { getSuggestions } from '../actions';

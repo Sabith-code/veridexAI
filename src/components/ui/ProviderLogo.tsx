@@ -4,6 +4,7 @@ import {
   SiClaude,
   SiGooglegemini,
   SiHuggingface,
+  SiNvidia,
   SiOllama,
   SiOpenai,
 } from '@icons-pack/react-simple-icons';
@@ -20,9 +21,11 @@ const brands: Record<string, { icon?: IconType; letters?: string }> = {
   ollama: { icon: SiOllama },
   transformers: { icon: SiHuggingface },
   claudecode: { icon: SiClaude },
+  nvidia: { icon: SiNvidia },
   groq: { letters: 'G' },
   lemonade: { letters: 'L' },
   xai: { letters: 'X' },
+  openrouter: { letters: 'OR' },
 };
 
 const ProviderLogo = ({

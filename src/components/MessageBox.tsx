@@ -22,6 +22,7 @@ import Renderer from './Widgets/Renderer';
 import CodeBlock from './MessageRenderer/CodeBlock';
 import UsageLine from './MessageRenderer/UsageLine';
 import CouncilBlockRenderer from './MessageRenderer/CouncilBlock';
+import VerificationPanel from './VerificationPanel';
 
 const ThinkTagProcessor = ({
   children,
@@ -286,6 +287,10 @@ const MessageBox = ({
                 </AnswerTabs>
               ) : (
                 answerBody
+              )}
+
+              {!loading && rawAnswerText.trim() && (
+                <VerificationPanel query={section.message.query} answer={rawAnswerText} sources={sources} />
               )}
 
               {isLast &&

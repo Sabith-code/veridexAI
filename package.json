@@ -1,12 +1,12 @@
 {
   "name": "vane",
-  "productName": "Simplicity",
+  "productName": "Veridex",
   "version": "1.12.2",
   "license": "MIT",
   "author": "ItzCrazyKns",
   "main": "desktop/main.mjs",
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/start-dev.mjs",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",

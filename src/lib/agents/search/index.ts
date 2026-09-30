@@ -120,17 +120,31 @@ class SearchAgent {
     if (searchResults) {
       /* Bounded, or Deep Research's 60 extracted pages overflow the model
          context (and the Claude CLI's argv) and the writer dies. */
-      finalContext = budgetChunks(
-        searchResults.searchFindings,
-        CONTEXT_TOKEN_BUDGET[
-          input.config.searchMode === 'deepResearch' ? 'deepResearch' : 'search'
-        ],
-      )
-        .map(
-          (f, index) =>
-            `<result index=${index + 1} title=${f.metadata.title}>${f.content}</result>`,
+      console.log(
+        '[DEBUG] searchFindings:',
+        searchResults.searchFindings.map((f) => ({
+          title: f.metadata.title,
+          url: f.metadata.url,
+          content: f.content?.slice(0, 300),
+        })),
+      );
+
+      if (searchResults.searchFindings.length === 0) {
+        finalContext =
+          '<search_results note="No usable SearXNG results were returned. This usually means the local search backend was unavailable or no relevant result was found; do not claim there was evidence when the backend failed.">No search results available.</search_results>';
+      } else {
+        finalContext = budgetChunks(
+          searchResults.searchFindings,
+          CONTEXT_TOKEN_BUDGET[
+            input.config.searchMode === 'deepResearch' ? 'deepResearch' : 'search'
+          ],
         )
-        .join('\n');
+          .map(
+            (f, index) =>
+              `<result index="${index + 1}" title="${f.metadata.title}" url="${f.metadata.url}">${f.content}</result>`,
+          )
+          .join('\n');
+      }
     }
 
     const widgetContext = widgetOutputs

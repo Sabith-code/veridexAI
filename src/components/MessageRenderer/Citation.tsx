@@ -2,6 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { Chunk } from '@/lib/types';
 import { faviconUrl, getDomainLabel, getHost, isFileSource } from './sourceUtils';
@@ -29,6 +30,7 @@ const Citation = ({
 
   const [open, setOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState(0);
+  const [tooltipPosition, setTooltipPosition] = useState({ left: 0, top: 0 });
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLSpanElement>(null);
 
@@ -62,6 +64,13 @@ const Citation = ({
 
   const openNow = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
+    const anchor = wrapperRef.current?.getBoundingClientRect();
+    if (anchor) {
+      setTooltipPosition({
+        left: anchor.left + anchor.width / 2,
+        top: anchor.top - 8,
+      });
+    }
     setOpen(true);
   };
 
@@ -114,11 +123,12 @@ const Citation = ({
         )}
       </button>
 
-      {open && (
+      {open && typeof document !== 'undefined' && createPortal(
         <div
           onMouseEnter={openNow}
           onMouseLeave={scheduleClose}
-          className="absolute z-40 bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 max-w-[80vw] rounded-lg border border-light-200 dark:border-dark-200 bg-light-primary dark:bg-dark-primary shadow-xl p-3 text-left"
+          style={{ left: tooltipPosition.left, top: tooltipPosition.top }}
+          className="fixed z-50 -translate-x-1/2 -translate-y-full w-72 max-w-[80vw] rounded-lg border border-light-200 dark:border-dark-200 bg-light-primary dark:bg-dark-primary shadow-xl p-3 text-left"
         >
           <div className="flex items-center gap-2 mb-1.5">
             {activeHost && (
@@ -184,7 +194,8 @@ const Citation = ({
               </a>
             )}
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </span>
   );

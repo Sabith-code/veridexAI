@@ -55,13 +55,14 @@ export const executeSearch = async (input: {
       }
 
       let resultChunks: Chunk[] = [];
+      const safeResults = Array.isArray(res?.results) ? res.results : [];
 
       try {
         const queryEmbedding = (await input.embedding.embedText([q]))[0];
 
         resultChunks = (
           await Promise.all(
-            res.results.map(async (r) => {
+            safeResults.map(async (r) => {
               const content = r.content || r.title;
               const chunkEmbedding = (
                 await input.embedding.embedText([content])
@@ -80,7 +81,7 @@ export const executeSearch = async (input: {
           )
         ).filter((c) => c.metadata.similarity > 0.5);
       } catch (err) {
-        resultChunks = res.results.map((r) => {
+        resultChunks = safeResults.map((r) => {
           const content = r.content || r.title;
 
           return {
@@ -197,8 +198,9 @@ export const executeSearch = async (input: {
       }
 
       let resultChunks: Chunk[] = [];
+      const safeResults = Array.isArray(res?.results) ? res.results : [];
 
-      resultChunks = res.results.map((r) => {
+      resultChunks = safeResults.map((r) => {
         const content = r.content || r.title;
 
         return {

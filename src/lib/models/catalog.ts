@@ -54,19 +54,54 @@ export const CATALOG_ROWS: CatalogRow[] = [
     badge: 'New',
     thinking: true,
     icon: 'openai',
-    candidates: [{ providerType: 'openai', key: 'gpt-5.1' }],
+    candidates: [
+      { providerType: 'openai', key: 'gpt-5.1' },
+      { providerType: 'openrouter', key: 'openai/gpt-5.1' },
+    ],
   },
   {
     id: 'gpt-5-mini',
     name: 'GPT-5 mini',
     icon: 'openai',
-    candidates: [{ providerType: 'openai', key: 'gpt-5-mini' }],
+    candidates: [
+      { providerType: 'openai', key: 'gpt-5-mini' },
+      { providerType: 'openrouter', key: 'openai/gpt-5-mini' },
+    ],
+  },
+  {
+    id: 'gpt-4o',
+    name: 'GPT-4o',
+    icon: 'openai',
+    candidates: [
+      { providerType: 'openrouter', key: 'openai/gpt-4o' },
+      { providerType: 'openai', key: 'openai/gpt-4o' },
+      { providerType: 'openai', key: 'gpt-4o' },
+    ],
+  },
+  {
+    id: 'gpt-4o-mini',
+    name: 'GPT-4o mini',
+    icon: 'openai',
+    candidates: [
+      { providerType: 'openrouter', key: 'openai/gpt-4o-mini' },
+      { providerType: 'openai', key: 'openai/gpt-4o-mini' },
+      { providerType: 'openai', key: 'gpt-4o-mini' },
+    ],
   },
   {
     id: 'gemini-2.5-pro',
-    name: 'Gemini 2.5 Pro',
+    name: 'Gemini Flash / Pro',
     icon: 'gemini',
-    candidates: [{ providerType: 'gemini', key: 'models/gemini-2.5-pro' }],
+    candidates: [
+      { providerType: 'gemini', key: 'models/gemini-flash-latest', free: true },
+      { providerType: 'gemini', key: 'models/gemini-3.8-flash', free: true },
+      { providerType: 'gemini', key: 'models/gemini-pro-latest', free: true },
+      { providerType: 'gemini', key: 'models/gemini-2.5-pro' },
+      { providerType: 'openrouter', key: 'google/gemini-2.5-pro' },
+      { providerType: 'openai', key: 'google/gemini-2.5-pro' },
+      { providerType: 'openrouter', key: 'google/gemini-2.0-flash-001' },
+      { providerType: 'openai', key: 'google/gemini-2.0-flash-001' },
+    ],
   },
   {
     id: 'claude-sonnet-5',
@@ -75,6 +110,20 @@ export const CATALOG_ROWS: CatalogRow[] = [
     candidates: [
       { providerType: 'claudecode', key: 'sonnet', free: true },
       { providerType: 'anthropic', key: 'claude-sonnet-5' },
+      { providerType: 'openrouter', key: 'anthropic/claude-3.5-sonnet' },
+      { providerType: 'openai', key: 'anthropic/claude-3.5-sonnet' },
+    ],
+  },
+  {
+    id: 'claude-3-7-sonnet',
+    name: 'Claude 3.7 Sonnet',
+    badge: 'New',
+    thinking: true,
+    icon: 'anthropic',
+    candidates: [
+      { providerType: 'openrouter', key: 'anthropic/claude-3.7-sonnet' },
+      { providerType: 'openai', key: 'anthropic/claude-3.7-sonnet' },
+      { providerType: 'anthropic', key: 'claude-3-7-sonnet' },
     ],
   },
   {
@@ -84,6 +133,28 @@ export const CATALOG_ROWS: CatalogRow[] = [
     candidates: [
       { providerType: 'claudecode', key: 'opus', free: true },
       { providerType: 'anthropic', key: 'claude-opus-4-8' },
+      { providerType: 'openrouter', key: 'anthropic/claude-3-opus' },
+      { providerType: 'openai', key: 'anthropic/claude-3-opus' },
+    ],
+  },
+  {
+    id: 'deepseek-r1',
+    name: 'DeepSeek R1',
+    badge: 'New',
+    thinking: true,
+    icon: 'openrouter',
+    candidates: [
+      { providerType: 'openrouter', key: 'deepseek/deepseek-r1' },
+      { providerType: 'openai', key: 'deepseek/deepseek-r1' },
+    ],
+  },
+  {
+    id: 'deepseek-v3',
+    name: 'DeepSeek V3',
+    icon: 'openrouter',
+    candidates: [
+      { providerType: 'openrouter', key: 'deepseek/deepseek-chat' },
+      { providerType: 'openai', key: 'deepseek/deepseek-chat' },
     ],
   },
   {
@@ -94,6 +165,79 @@ export const CATALOG_ROWS: CatalogRow[] = [
     candidates: [
       { providerType: 'xai', key: 'grok-4.1' },
       { providerType: 'xai', key: 'grok-4' },
+      { providerType: 'openrouter', key: 'x-ai/grok-2-1212' },
+      { providerType: 'openai', key: 'x-ai/grok-2-1212' },
+    ],
+  },
+  {
+    id: 'llama-3-70b',
+    name: 'Llama 3.1 70B',
+    icon: 'openrouter',
+    extra: true,
+    candidates: [
+      { providerType: 'openrouter', key: 'meta-llama/llama-3.1-70b-instruct' },
+      { providerType: 'openai', key: 'meta-llama/llama-3.1-70b-instruct' },
+      { providerType: 'openrouter', key: 'meta-llama/llama-3.3-70b-instruct' },
+      { providerType: 'openai', key: 'meta-llama/llama-3.3-70b-instruct' },
+    ],
+  },
+  {
+    id: 'nvidia-nemotron-free',
+    name: 'Nemotron 3.5 (Free)',
+    icon: 'nvidia',
+    candidates: [
+      {
+        providerType: 'openrouter',
+        key: 'nvidia/nemotron-3.5-lightning:free',
+        free: true,
+      },
+      {
+        providerType: 'openai',
+        key: 'nvidia/nemotron-3.5-lightning:free',
+        free: true,
+      },
+      {
+        providerType: 'openrouter',
+        key: 'nvidia/nemotron-3-super-120b-a12b:free',
+        free: true,
+      },
+      {
+        providerType: 'openai',
+        key: 'nvidia/nemotron-3-super-120b-a12b:free',
+        free: true,
+      },
+      {
+        providerType: 'openrouter',
+        key: 'nvidia/nemotron-3-ultra-550b-a55b:free',
+        free: true,
+      },
+      {
+        providerType: 'openai',
+        key: 'nvidia/nemotron-3-ultra-550b-a55b:free',
+        free: true,
+      },
+      {
+        providerType: 'openrouter',
+        key: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+        free: true,
+      },
+      {
+        providerType: 'openai',
+        key: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+        free: true,
+      },
+      {
+        providerType: 'openrouter',
+        key: 'nvidia/llama-3.1-nemotron-70b-instruct:free',
+        free: true,
+      },
+      {
+        providerType: 'openai',
+        key: 'nvidia/llama-3.1-nemotron-70b-instruct:free',
+        free: true,
+      },
+      { providerType: 'openrouter', key: 'nvidia/nemotron-3.5-lightning' },
+      { providerType: 'openai', key: 'nvidia/nemotron-3.5-lightning' },
     ],
   },
 
@@ -165,10 +309,23 @@ export const BEST_KEY = '__best__';
    of truth for "what's good" instead of a second hand-maintained list. */
 export const BEST_ORDER: Array<{ providerType: string; key: string }> = [
   { providerType: 'claudecode', key: 'sonnet' },
-  { providerType: 'groq', key: 'openai/gpt-oss-120b' },
+  { providerType: 'openrouter', key: 'anthropic/claude-3.7-sonnet' },
+  { providerType: 'openai', key: 'anthropic/claude-3.7-sonnet' },
+  { providerType: 'openrouter', key: 'anthropic/claude-3.5-sonnet' },
+  { providerType: 'openai', key: 'anthropic/claude-3.5-sonnet' },
+  { providerType: 'openrouter', key: 'openai/gpt-4o' },
+  { providerType: 'openai', key: 'openai/gpt-4o' },
   { providerType: 'openai', key: 'gpt-5.1' },
+  { providerType: 'openrouter', key: 'openai/gpt-4o-mini' },
+  { providerType: 'openai', key: 'openai/gpt-4o-mini' },
+  { providerType: 'openai', key: 'gpt-5-mini' },
   { providerType: 'openai', key: 'gpt-4o' },
+  { providerType: 'openrouter', key: 'deepseek/deepseek-chat' },
+  { providerType: 'openai', key: 'deepseek/deepseek-chat' },
+  { providerType: 'groq', key: 'openai/gpt-oss-120b' },
   { providerType: 'anthropic', key: 'claude-sonnet-5' },
+  { providerType: 'gemini', key: 'models/gemini-flash-latest' },
+  { providerType: 'gemini', key: 'models/gemini-3.8-flash' },
   { providerType: 'gemini', key: 'models/gemini-2.5-pro' },
   { providerType: 'xai', key: 'grok-4' },
   { providerType: 'ollama', key: 'qwen2.5:7b' },

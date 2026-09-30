@@ -132,16 +132,27 @@ class ModelRegistry {
       };
     }
 
-    this.activeProviders.push({
-      ...newProvider,
-      provider: instance,
-    });
-
-    return {
+    const persistedProvider = {
       ...newProvider,
       chatModels: m.chat || [],
       embeddingModels: m.embedding || [],
     };
+
+    this.activeProviders.push({
+      ...persistedProvider,
+      provider: instance,
+    });
+
+    console.log('[ModelRegistry.addProvider] persisted provider state', {
+      type,
+      name,
+      providerId: newProvider.id,
+      chatModels: persistedProvider.chatModels,
+      embeddingModels: persistedProvider.embeddingModels,
+      config: newProvider.config,
+    });
+
+    return persistedProvider;
   }
 
   async removeProvider(providerId: string): Promise<void> {
@@ -190,16 +201,21 @@ class ModelRegistry {
       };
     }
 
-    this.activeProviders.push({
-      ...updated,
-      provider: instance,
-    });
-
-    return {
+    const nextProviderState = {
       ...updated,
       chatModels: m.chat || [],
       embeddingModels: m.embedding || [],
     };
+
+    this.activeProviders = this.activeProviders.filter(
+      (p) => p.id !== providerId,
+    );
+    this.activeProviders.push({
+      ...nextProviderState,
+      provider: instance,
+    });
+
+    return nextProviderState;
   }
 
   /* Using async here because maybe in the future we might want to add some validation?? */

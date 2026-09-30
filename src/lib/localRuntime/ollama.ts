@@ -113,7 +113,7 @@ async function downloadBinary(onLog: (m: string) => void): Promise<string> {
        picks it up on the very next call, so re-clicking Install is genuinely
        enough to finish setup — this isn't a dead end. */
     throw new Error(
-      "Automatic download isn't available on this platform yet. Install Ollama yourself from https://ollama.com/download, then click Install again — Simplicity will detect it and finish setup from there.",
+      "Automatic download isn't available on this platform yet. Install Ollama yourself from https://ollama.com/download, then click Install again — Veridex will detect it and finish setup from there.",
     );
   }
 

@@ -29,8 +29,8 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: 'Simplicity - Direct your curiosity',
-  description: 'Simplicity is an AI powered answering engine.',
+  title: 'Veridex - Direct your curiosity',
+  description: 'Veridex is an AI powered answering engine.',
 };
 
 export default function RootLayout({

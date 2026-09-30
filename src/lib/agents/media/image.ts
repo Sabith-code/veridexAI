@@ -48,9 +48,10 @@ const searchImages = async (
     engines: ['bing images', 'google images'],
   });
 
+  const imageResults = Array.isArray(searchRes?.results) ? searchRes.results : [];
   const images: ImageSearchResult[] = [];
 
-  searchRes.results.forEach((result) => {
+  imageResults.forEach((result) => {
     if (result.img_src && result.url && result.title) {
       images.push({
         img_src: result.img_src,

@@ -2,8 +2,8 @@ import ChatWindow from '@/components/ChatWindow';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Chat - Simplicity',
-  description: 'Chat with the internet, chat with Simplicity.',
+  title: 'Chat - Veridex',
+  description: 'Chat with the internet, chat with Veridex.',
 };
 
 const Home = () => {

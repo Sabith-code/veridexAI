@@ -140,7 +140,17 @@ export function resolvePricingKey(
     case 'xai':
       if (modelKey === 'grok-4.1') return 'grok-4.1-fast';
       return modelKey; // grok-4, grok-4.3
+    case 'openrouter': {
+      const bare = modelKey.includes('/') ? modelKey.split('/').pop()! : modelKey;
+      if (bare === 'claude-3.5-sonnet' || bare === 'claude-3-5-sonnet' || bare === 'claude-3.7-sonnet') return 'claude-sonnet-5';
+      return bare;
+    }
     default:
+      if (modelKey.startsWith('openai/') || modelKey.startsWith('anthropic/')) {
+        const bare = modelKey.split('/').pop()!;
+        if (bare === 'claude-3.5-sonnet' || bare === 'claude-3-5-sonnet' || bare === 'claude-3.7-sonnet') return 'claude-sonnet-5';
+        return bare;
+      }
       return modelKey; // unknown → try exact, may miss → null cost
   }
 }

@@ -48,6 +48,10 @@ const providerInfo: Record<string, { free: boolean; blurb: string }> = {
     blurb: 'Key from console.groq.com. Has a free tier.',
   },
   openai: { free: false, blurb: 'Paid key from platform.openai.com.' },
+  openrouter: {
+    free: false,
+    blurb: 'Key from openrouter.ai. Access OpenAI, Claude, DeepSeek, and more.',
+  },
 };
 
 /* Where to actually go get a key, for the providers that need one. Opened in
@@ -55,6 +59,7 @@ const providerInfo: Record<string, { free: boolean; blurb: string }> = {
    console page. */
 const keyLinks: Record<string, string> = {
   openai: 'https://platform.openai.com/api-keys',
+  openrouter: 'https://openrouter.ai/keys',
   groq: 'https://console.groq.com/keys',
   gemini: 'https://aistudio.google.com/apikey',
   anthropic: 'https://console.anthropic.com/settings/keys',
@@ -434,7 +439,7 @@ const ApiKeyExplainer = () => {
         </button>
       </div>
       <p className="text-[11px] sm:text-xs leading-relaxed text-black/60 dark:text-white/60">
-        Think of it like a password — it lets Simplicity use an AI service
+        Think of it like a password — it lets Veridex use an AI service
         (like OpenAI or Google) under your own account, so usage is billed to
         you, not us. Keys stay on your device and go straight to that
         provider, never anywhere else. Would rather skip that? Ollama (installs
@@ -456,7 +461,7 @@ const ApiKeyExplainer = () => {
         use the &quot;Get a key&quot; link on a provider below → sign in (or
         create a free developer account) → add a small credit balance if the
         platform asks (usually $5 minimum; each answer costs fractions of a
-        cent and Simplicity shows the exact price under every answer) → click
+        cent and Veridex shows the exact price under every answer) → click
         &quot;Create key&quot; → copy it → paste it here.
       </p>
     </div>

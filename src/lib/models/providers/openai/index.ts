@@ -151,14 +151,102 @@ class OpenAIProvider extends BaseModelProvider<OpenAIConfig> {
 
   async getModelList(): Promise<ModelList> {
     const defaultModels = await this.getDefaultModels();
-    const configProvider = getConfiguredModelProviderById(this.id)!;
+    const configProvider = getConfiguredModelProviderById(this.id);
+    const configuredChatModels = configProvider?.chatModels ?? [];
+    const configuredEmbeddingModels = configProvider?.embeddingModels ?? [];
+
+    const dedupeModels = (models: Model[]) => {
+      const seen = new Set<string>();
+      return models.filter((model) => {
+        if (!model?.key || seen.has(model.key)) return false;
+        seen.add(model.key);
+        return true;
+      });
+    };
+
+    if (this.config.baseURL !== 'https://api.openai.com/v1') {
+      try {
+        const baseUrl = this.config.baseURL.endsWith('/')
+          ? this.config.baseURL
+          : `${this.config.baseURL}/`;
+        const url = new URL('models', baseUrl).toString();
+        const response = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${this.config.apiKey}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `Model discovery failed for ${url} with status ${response.status}. Check the API key and base URL.`,
+          );
+        }
+
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          const text = await response.text();
+          throw new Error(
+            `Model discovery returned a non-JSON response for ${url}: ${text.slice(0, 160)}`,
+          );
+        }
+
+        const text = await response.text();
+        let payload: any = {};
+        try {
+          payload = text ? JSON.parse(text) : {};
+        } catch {
+          throw new Error(
+            `Model discovery returned malformed JSON for ${url}: ${text.slice(0, 160)}`,
+          );
+        }
+
+        const remoteModels: Model[] = Array.isArray(payload?.data)
+          ? payload.data
+              .map((entry: any) => {
+                const key = typeof entry?.id === 'string' ? entry.id : null;
+                if (!key) return null;
+                return {
+                  key,
+                  name: entry?.name || key,
+                };
+              })
+              .filter(Boolean)
+          : [];
+
+        const chatModels = dedupeModels([
+          ...remoteModels,
+          ...configuredChatModels,
+          ...defaultModels.chat,
+        ]);
+
+        return {
+          embedding: dedupeModels([
+            ...defaultModels.embedding,
+            ...configuredEmbeddingModels,
+          ]),
+          chat: chatModels,
+        };
+      } catch (error) {
+        console.warn(
+          `[OpenAIProvider] Remote model discovery failed for ${this.config.baseURL}:`,
+          error,
+        );
+
+        if (configuredChatModels.length === 0 && defaultModels.chat.length === 0) {
+          throw new Error(
+            `OpenAI/OpenRouter is configured, but no usable chat models were discovered. Check the API key and base URL.`,
+          );
+        }
+      }
+    }
 
     return {
-      embedding: [
+      embedding: dedupeModels([
         ...defaultModels.embedding,
-        ...configProvider.embeddingModels,
-      ],
-      chat: [...defaultModels.chat, ...configProvider.chatModels],
+        ...configuredEmbeddingModels,
+      ]),
+      chat: dedupeModels([...defaultModels.chat, ...configuredChatModels]),
     };
   }
 
@@ -169,7 +257,7 @@ class OpenAIProvider extends BaseModelProvider<OpenAIConfig> {
 
     if (!exists) {
       throw new Error(
-        'Error Loading OpenAI Chat Model. Invalid Model Selected',
+        `OpenAI/OpenRouter model '${key}' is not available. Check the provider configuration and the model name.`,
       );
     }
 

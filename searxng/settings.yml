@@ -1,7 +1,7 @@
 use_default_settings: true
 
 general:
-  instance_name: 'searxng'
+  instance_name: 'simplicity'
 
 search:
   autocomplete: 'google'
@@ -10,8 +10,26 @@ search:
     - json
 
 server:
-  secret_key: 'a2fb23f1b02e6ee83875b09826990de0f6bd908b6638e8c10277d415f6ab852b' # Is overwritten by ${SEARXNG_SECRET}
+  secret_key: 'e78756f9fd66aa4082cf9f831c6892442f971b654a36782d35149c3ffaf45a00'
+
+outgoing:
+  request_timeout: 8.0
+  max_request_timeout: 12.0
 
 engines:
   - name: wolframalpha
+    disabled: false
+  - name: duckduckgo
+    disabled: false
+  - name: brave
+    disabled: false
+  - name: bing
+    disabled: false
+  - name: startpage
+    disabled: false
+  - name: qwant
+    disabled: false
+  - name: mojeek
+    disabled: false
+  - name: wikipedia
     disabled: false
